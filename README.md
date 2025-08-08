@@ -18,9 +18,6 @@ commit的改动和期望实现的目的，以便维护一个完整的change log�
 
 2.2. ESP-IDF自带组件的配置全部通过工程下sdkconfig完成，因此如果对sdkconfig有改动，也应当新建branch进行测试。
 
-2.3. 如果需要自己编写ESP-IDF自带组件之外的模块驱动，需要放在component文件夹下，路径结构参考test_component。在ESP-IDE下，可以通过
-“File->New->乐鑫IDF组件”自定义组件。
-
 
 
 3.1. 自定义的变量名称应当使用英文或英文缩写，尽可能简短而清晰地说明这个变量的功能。具体命名规范为大驼峰命名法，
@@ -30,6 +27,7 @@ commit的改动和期望实现的目的，以便维护一个完整的change log�
 3.2. main.c内定义的函数仅包含任务函数、中断服务子程。自定义子函数应当在BSP文件夹下新开.c和.h文件。
 
 3.3. 在bsp.h内include BSP文件夹内所有其它.h文件，这样只需要在.c文件内 include一次bsp.h，就能够使用BSP内所有自定义函数。
+
 3.4. 写.h文件时注意使用#ifndef #define #endif语句，来避免.h文件重复include。
 
 3.5. 所有全局变量都在main.c内定义，并在bsp.h内通过extern关键字声明，以此避免重复声明。如果全局变量使用了自定义结构体，
