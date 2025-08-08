@@ -14,6 +14,8 @@ commit的改动和期望实现的目的，以便维护一个完整的change log�
 
 1.4. 提交bug issue与featrue issue请按照仓库内issue template格式。
 
+git使用细节参考（https://zhuanlan.zhihu.com/p/51199833 ）
+
 2.1. FreeRTOS直接使用ESP-IDF组件，因此没有包含在工程目录下，需要正确配置ESP-IDF。
 
 2.2. ESP-IDF自带组件的配置全部通过工程下sdkconfig完成，因此如果对sdkconfig有改动，也应当新建branch进行测试。
