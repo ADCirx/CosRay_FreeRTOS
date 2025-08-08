@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "esp_chip_info.h": "c",
-        "task.h": "c",
-        "esp_flash.h": "c",
-        "freertos.h": "c",
-        "freertosconfig.h": "c"
-    }
-}
