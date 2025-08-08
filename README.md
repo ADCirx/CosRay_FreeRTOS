@@ -6,13 +6,13 @@ MPL2.0许可协议，修改不可闭源，但新增代码协议不必延续MPL�
 1.1. git仓库会忽略build与Archives与Binaries目录下的所有文件，因此每次从远程仓库同步后需要重新build。
 
 1.2. 协作开发方式：每次实现新功能前，从远程仓库拉取（pull）最新版本代码到本地仓库，再新建一个分支（branch）。本地仓库多次
-commit后，编译测试实现了期望的功能，把本地仓库push到新建分支上，同时在push时提交一份说明。之后再提交一个merge request，
-申请将新分支与master分支合并，经过其他成员测试审核后通过合并请求，正式合并。
+commit后，编译测试实现了期望的功能，把本地仓库push到新建分支上，同时在push时提交一份说明。之后再提交一个pull request，
+申请将新分支与main分支合并，经过其他成员测试审核后通过合并请求，正式合并。
 
 1.3. commit is cheap，commit 仅提交代码到本地仓库，因此为了版本管理方便起见应该多commit。但每次commit应该简单描述
 commit的改动和期望实现的目的，以便维护一个完整的change log。
 
-
+1.4. 提交bug issue与featrue issue请按照格式。
 
 2.1. FreeRTOS直接使用ESP-IDF组件，因此没有包含在工程目录下，需要正确配置ESP-IDF。
 
