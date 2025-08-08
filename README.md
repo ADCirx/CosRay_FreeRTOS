@@ -15,7 +15,7 @@ commit的改动和期望实现的目的，以便维护一个完整的change log�
 “File->New->乐鑫IDF组件”自定义组件。
 
 3.1. 自定义的变量名称应当使用英文或英文缩写，尽可能简短而清晰地说明这个变量的功能。具体命名规范为大驼峰命名法，
-（参考 https://blog.csdn.net/weixin_43758823/article/details/84888470），每个逻辑断点的单词的首字母大写，不需要
+（参考 https://blog.csdn.net/weixin_43758823/article/details/84888470 ），每个逻辑断点的单词的首字母大写，不需要
 下划线。示例：需要设置一个存储科学数据的缓存，命名为SCIBuf。
 3.2. main.c内定义的函数仅包含任务函数、中断服务子程。自定义子函数应当在BSP文件夹下新开.c和.h文件。
 3.3. 在bsp.h内include BSP文件夹内所有其它.h文件，这样只需要在.c文件内 include一次bsp.h，就能够使用BSP内所有自定义函数。
@@ -29,16 +29,18 @@ typedef struct SCIPkg {
     uint8_t                 Head[3];
     SCIDataType             Event;
     SCIDataShortType        EventShort[43];
-    uint8_t                 EffCnt[4];
+    uint8_t                 EffCnt[4]; 
     uint8_t                 LostCnt[4];
     uint8_t                 Tail[3];
     uint8_t                 CRC[2];
 }SCIPkgType;
 
 在bsp.h内通过extern关键字声明SCIBuf全局变量
+
 extern          SCIPkgType      SCIBuf[2][8];
 
 在main.c内定义SCIBuf全局变量
+
 SCIPkgType      SCIBuf[2][8]     = {0};
 
 3.6. 作者信息与代码功能在代码内通过注释体现，示例：
