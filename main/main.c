@@ -99,7 +99,8 @@ void app_main(void)
 	AppSetup();
 	InterruptSetup();
 	ESP_LOGI(TAG, "All tasks created, scheduler will start");
-
+	//注意：esp-idf 的 freertos不需要用户启动系统任务调度
+	//vTaskStartScheduler();  //Enables task scheduling
 	while (1)
     {
 		ESP_LOGI(TAG, "error");
