@@ -9,6 +9,11 @@
 #include "esp_flash.h"
 #include "esp_system.h"
 #include "config.h"
+#include "esp_log.h"
+
+//TAG 变量指向存储在 flash 中的一个字符串字面量
+//见esp_log使用教程：https://docs.espressif.com/projects/esp-idf/zh_CN/stable/esp32/api-reference/system/log.html
+static const char* TAG = "MyModule";
 
 // 任务句柄声明
 TaskHandle_t dataProcessTaskHandle;
@@ -19,32 +24,38 @@ TaskHandle_t telTaskHandle;
 uint8_t gpsBuffer[256];
 
 
-/*!
- * \brief
- *
- */
-static void GpsReceiveInterrupt(void *pvParameters);
-
-
-static void GpsInterruptSetup(void);
 
 /*!
  * \brief
  *
  */
-static void PpsReceiveInterrupt(void *pvParameters);
+static void GpsRxIntTask(void);
 
 
-static void PpsInterruptSetup(void);
+static void GpsRxIntSetup(void);
+
 
 /*!
  * \brief
  *
  */
-static void MuonReceiveInterrupt(void *pvParameters);
+static void PPSIntTask(void);
 
 
-static void MuonInterruptSetup(void);
+
+static void PPSIntSetup(void);
+
+
+/*!
+ * \brief
+ *
+ */
+static void MuonIntTask(void);
+
+
+
+static void MuonInttSetup(void);
+
 
 /*!
  * \brief
@@ -56,19 +67,19 @@ static void AppDataProcess(void *pvParameters);
  * \brief
  *
  */
-static void AppBlueTooth(void);
+static void AppBlueTooth(void *pvParameters);
 
 /*!
  * \brief
  *
  */
-static void AppDataStore(void);
+static void AppDataStore(void *pvParameters);
 
 /*!
  * \brief
  *
  */
-static void AppDataTEL(void);
+static void AppDataTEL(void *pvParameters);
 
 /*!
  * \brief
@@ -95,17 +106,98 @@ void app_main(void)
 	}
 }
 
+static void GpsRxIntTask(void)
+{
+	
+}
+
+
+static void GpsRxIntSetup(void)
+{
+	
+}
+
+/*!
+ * \brief
+ *
+ */
+static void PPSIntTask(void)
+{
+	
+}
+
+
+static void PPSIntSetup(void)
+{
+	
+}
+
+/*!
+ * \brief
+ *
+ */
+static void MuonIntTask(void)
+{
+	
+}
+
+
+static void MuonInttSetup(void)
+{
+	
+}
+
+/*!
+ * \brief
+ *
+ */
+static void AppDataProcess(void *pvParameters)
+{
+	
+}
+
+/*!
+ * \brief
+ *
+ */
+static void AppBlueTooth(void *pvParameters)
+{
+	
+}
+
+/*!
+ * \brief
+ *
+ */
+static void AppDataStore(void *pvParameters)
+{
+	
+}
+
+/*!
+ * \brief
+ *
+ */
+static void AppDataTEL(void *pvParameters)
+{
+	
+}
+
+
+
+
+
 void InterruptSetup(void)
 {
     ESP_LOGI(TAG, "Setting up interrupts...");
     
-    GpsInterruptSetup();
+    GpsRxIntSetup();
     ESP_LOGI(TAG, "GPS interrupt setup completed");
     
-    PpsInterruptSetup();
+    PPSIntSetup();
     ESP_LOGI(TAG, "PPS interrupt setup completed");
     
-    MuonInterruptSetup();
+    MuonInttSetup();
     ESP_LOGI(TAG, "Muon interrupt setup completed");
     
     ESP_LOGI(TAG, "All interrupts setup completed");
