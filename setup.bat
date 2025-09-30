@@ -19,7 +19,7 @@ set PATH=%PATH%;%USERPROFILE%\.local\bin
 
 REM 使用 uv 安装 pre-commit
 echo 使用 uv 安装 pre-commit...
-uv add pre-commit
+uv add -r requirements.txt
 uv sync
 if %errorlevel% neq 0 (
     echo pre-commit 安装失败

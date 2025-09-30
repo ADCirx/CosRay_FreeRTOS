@@ -25,7 +25,7 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";"
 # 使用 uv 安装 pre-commit
 Write-Host "使用 uv 安装 pre-commit..."
 try {
-    & uv add pre-commit
+    & uv add -r requirements.txt
     & uv sync
     Write-Host "pre-commit 安装完成。"
 } catch {

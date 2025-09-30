@@ -21,7 +21,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # 使用 uv 安装 pre-commit
 echo "使用 uv 安装 pre-commit..."
-if uv add pre-commit;uv sync; then
+if uv add -r requirements.txt;uv sync; then
     echo "pre-commit 安装完成。"
 else
     echo "pre-commit 安装失败"

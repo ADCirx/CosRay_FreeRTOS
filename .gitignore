@@ -10,3 +10,6 @@
 
 # Python
 .venv
+
+# prettier
+node_modules
