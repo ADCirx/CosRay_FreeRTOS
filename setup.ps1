@@ -13,6 +13,7 @@ if (!(Get-Command uv -ErrorAction SilentlyContinue)) {
         Write-Host "uv 安装完成。"
     } catch {
         Write-Error "uv 安装失败: $_"
+        Write-Host "运行失败，考虑配置网络代理"
         exit 1
     }
 } else {
@@ -30,6 +31,7 @@ try {
     Write-Host "pre-commit 安装完成。"
 } catch {
     Write-Error "pre-commit 安装失败: $_"
+    Write-Host "运行失败，考虑配置网络代理"
     exit 1
 }
 
@@ -40,6 +42,7 @@ try {
     Write-Host "虚拟环境激活完成。"
 } catch {
     Write-Error "虚拟环境激活失败: $_"
+    Write-Host "运行失败，考虑配置网络代理"
     exit 1
 }
 
@@ -50,6 +53,7 @@ try {
     Write-Host "pre-commit 钩子安装完成。"
 } catch {
     Write-Error "pre-commit 钩子安装失败: $_"
+    Write-Host "运行失败，考虑配置网络代理"
     exit 1
 }
 

@@ -10,6 +10,7 @@ if ! command -v uv &> /dev/null; then
         echo "uv 安装完成。"
     else
         echo "uv 安装失败"
+        echo "运行失败，考虑配置网络代理"
         exit 1
     fi
 else
@@ -25,6 +26,7 @@ if uv add -r requirements.txt;uv sync; then
     echo "pre-commit 安装完成。"
 else
     echo "pre-commit 安装失败"
+    echo "运行失败，考虑配置网络代理"
     exit 1
 fi
 
@@ -34,6 +36,7 @@ if source .venv/bin/activate; then
     echo "虚拟环境激活完成。"
 else
     echo "虚拟环境激活失败"
+    echo "运行失败，考虑配置网络代理"
     exit 1
 fi
 
@@ -43,6 +46,7 @@ if pre-commit install; then
     echo "pre-commit 钩子安装完成。"
 else
     echo "pre-commit 钩子安装失败"
+    echo "运行失败，考虑配置网络代理"
     exit 1
 fi
 
