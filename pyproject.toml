@@ -1,0 +1,17 @@
+[project]
+name = "cosray-freertos"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "black>=25.9.0",
+    "pre-commit>=4.3.0",
+    "pytest>=8.4.2",
+    "pytest-embedded-idf>=2.1.0",
+    "pytest-embedded-qemu>=2.1.0",
+]
+
+# 镜像配置
+[tool.uv]
+index-url = "https://pypi.tuna.tsinghua.edu.cn/simple"

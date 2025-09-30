@@ -7,3 +7,9 @@
 /.settings
 
 /.vscode
+
+# Python
+.venv
+
+# prettier
+node_modules
