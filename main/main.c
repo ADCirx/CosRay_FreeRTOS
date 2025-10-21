@@ -57,12 +57,6 @@ static void AppDataProcess(void *pvParameters);
  * \brief
  *
  */
-static void AppBlueTooth(void *pvParameters);
-
-/*!
- * \brief
- *
- */
 static void AppDataStore(void *pvParameters);
 
 /*!
@@ -125,12 +119,6 @@ static void AppDataProcess(void *pvParameters) {}
  * \brief
  *
  */
-static void AppBlueTooth(void *pvParameters) {}
-
-/*!
- * \brief
- *
- */
 static void AppDataStore(void *pvParameters) {}
 
 /*!
@@ -165,13 +153,14 @@ void AppSetup(void) {
 	}
 	ESP_LOGI(TAG, "Task1 created successfully");
 	// 创建蓝牙任务
-	ret = xTaskCreate(AppBlueTooth, "Bluetooth_Task", BLUETOOTH_TASK_STACK_SIZE,
+	InitBlueTooth();
+	ret = xTaskCreate(AppBlueTooth, "BlueTooth_Task", BLUETOOTH_TASK_STACK_SIZE,
 					  NULL, BLUETOOTH_TASK_PRIORITY, &bluetoothTaskHandle);
 	if (ret != pdPASS) {
-		ESP_LOGE(TAG, "Failed to create Task1");
+		ESP_LOGE(TAG, "Failed to create BlueTooth Task");
 		return;
 	}
-	ESP_LOGI(TAG, "Task1 created successfully");
+	ESP_LOGI(TAG, "BlueTooth Task created successfully");
 	// 创建数据存储任务
 	ret =
 		xTaskCreate(AppDataStore, "DataStore_Task", DATA_STORE_TASK_STACK_SIZE,
