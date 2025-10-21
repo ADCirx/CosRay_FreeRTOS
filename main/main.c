@@ -11,6 +11,8 @@
 #include <inttypes.h>
 #include <stdio.h>
 
+#include "bleprph.h"
+
 // TAG 变量指向存储在 flash 中的一个字符串字面量
 // 见esp_log使用教程：https://docs.espressif.com/projects/esp-idf/zh_CN/stable/esp32/api-reference/system/log.html
 static const char *TAG = "MyModule";
@@ -143,15 +145,17 @@ void InterruptSetup(void) {
 }
 
 void AppSetup(void) {
-	// 创建GPS接收任务
-	BaseType_t ret = xTaskCreate(
-		AppDataProcess, "DataProcess_Task", DATA_PROCESS_TASK_STACK_SIZE, NULL,
-		DATA_PROCESS_TASK_PRIORITY, &dataProcessTaskHandle);
-	if (ret != pdPASS) {
-		ESP_LOGE(TAG, "Failed to create Task1");
-		return;
-	}
-	ESP_LOGI(TAG, "Task1 created successfully");
+	BaseType_t ret;
+	// // 创建GPS接收任务
+	// ret = xTaskCreate(
+	// 	AppDataProcess, "DataProcess_Task", DATA_PROCESS_TASK_STACK_SIZE, NULL,
+	// 	DATA_PROCESS_TASK_PRIORITY, &dataProcessTaskHandle);
+	// if (ret != pdPASS) {
+	// 	ESP_LOGE(TAG, "Failed to create Task1");
+	// 	return;
+	// }
+	// ESP_LOGI(TAG, "Task1 created successfully");
+
 	// 创建蓝牙任务
 	InitBlueTooth();
 	ret = xTaskCreate(AppBlueTooth, "BlueTooth_Task", BLUETOOTH_TASK_STACK_SIZE,
