@@ -157,9 +157,15 @@ void AppSetup(void) {
 	ESP_LOGI(TAG, "Task1 created successfully");
 
 	// 创建蓝牙任务
-	InitBlueTooth();
+	ESP_LOGI(TAG, "Initializing BlueTooth Peripheral");
+	esp_err_t ret_bt = InitBlueTooth();
+	if (ret_bt != ESP_OK) {
+		ESP_LOGE(TAG, "Failed to initialize BlueTooth Peripheral");
+		return;
+	}
+	ESP_LOGI(TAG, "Creating BlueTooth Task");
 	ret = xTaskCreate(AppBlueTooth, "BlueTooth_Task", BLUETOOTH_TASK_STACK_SIZE,
-					  NULL, BLUETOOTH_TASK_PRIORITY, &bluetoothTaskHandle);
+					NULL, BLUETOOTH_TASK_PRIORITY, &bluetoothTaskHandle);
 	if (ret != pdPASS) {
 		ESP_LOGE(TAG, "Failed to create BlueTooth Task");
 		return;
