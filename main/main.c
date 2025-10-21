@@ -146,15 +146,15 @@ void InterruptSetup(void) {
 
 void AppSetup(void) {
 	BaseType_t ret;
-	// // 创建GPS接收任务
-	// ret = xTaskCreate(
-	// 	AppDataProcess, "DataProcess_Task", DATA_PROCESS_TASK_STACK_SIZE, NULL,
-	// 	DATA_PROCESS_TASK_PRIORITY, &dataProcessTaskHandle);
-	// if (ret != pdPASS) {
-	// 	ESP_LOGE(TAG, "Failed to create Task1");
-	// 	return;
-	// }
-	// ESP_LOGI(TAG, "Task1 created successfully");
+	// 创建GPS接收任务
+	ret = xTaskCreate(
+		AppDataProcess, "DataProcess_Task", DATA_PROCESS_TASK_STACK_SIZE, NULL,
+		DATA_PROCESS_TASK_PRIORITY, &dataProcessTaskHandle);
+	if (ret != pdPASS) {
+		ESP_LOGE(TAG, "Failed to create Task1");
+		return;
+	}
+	ESP_LOGI(TAG, "Task1 created successfully");
 
 	// 创建蓝牙任务
 	InitBlueTooth();
