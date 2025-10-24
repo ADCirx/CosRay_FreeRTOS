@@ -87,7 +87,8 @@ void app_main(void) {
 	// 注意：esp-idf 的 freertos不需要用户启动系统任务调度
 	// vTaskStartScheduler();  //Enables task scheduling
 	while (1) {
-		ESP_LOGI(TAG, "error");
+		ESP_LOGI(TAG, "Running...");
+		vTaskDelay(pdMS_TO_TICKS(1000));
 	}
 }
 
@@ -147,14 +148,14 @@ void InterruptSetup(void) {
 void AppSetup(void) {
 	BaseType_t ret;
 	// 创建GPS接收任务
-	ret = xTaskCreate(
-		AppDataProcess, "DataProcess_Task", DATA_PROCESS_TASK_STACK_SIZE, NULL,
-		DATA_PROCESS_TASK_PRIORITY, &dataProcessTaskHandle);
-	if (ret != pdPASS) {
-		ESP_LOGE(TAG, "Failed to create Task1");
-		return;
-	}
-	ESP_LOGI(TAG, "Task1 created successfully");
+	// ret = xTaskCreate(
+	// 	AppDataProcess, "DataProcess_Task", DATA_PROCESS_TASK_STACK_SIZE, NULL,
+	// 	DATA_PROCESS_TASK_PRIORITY, &dataProcessTaskHandle);
+	// if (ret != pdPASS) {
+	// 	ESP_LOGE(TAG, "Failed to create Task1");
+	// 	return;
+	// }
+	// ESP_LOGI(TAG, "Task1 created successfully");
 
 	// 创建蓝牙任务
 	ESP_LOGI(TAG, "Initializing BlueTooth Peripheral");
@@ -171,20 +172,21 @@ void AppSetup(void) {
 		return;
 	}
 	ESP_LOGI(TAG, "BlueTooth Task created successfully");
+
 	// 创建数据存储任务
-	ret =
-		xTaskCreate(AppDataStore, "DataStore_Task", DATA_STORE_TASK_STACK_SIZE,
-					NULL, DATA_STORE_TASK_PRIORITY, &dataStoreTaskHandle);
-	if (ret != pdPASS) {
-		ESP_LOGE(TAG, "Failed to create Task1");
-		return;
-	}
-	ESP_LOGI(TAG, "Task1 created successfully");
-	ret = xTaskCreate(AppDataTEL, "DataTEL_Task", DATA_TEL_TASK_STACK_SIZE,
-					  NULL, DATA_TEL_TASK_PRIORITY, &telTaskHandle);
-	if (ret != pdPASS) {
-		ESP_LOGE(TAG, "Failed to create Task1");
-		return;
-	}
-	ESP_LOGI(TAG, "Task1 created successfully");
+	// ret =
+	// 	xTaskCreate(AppDataStore, "DataStore_Task", DATA_STORE_TASK_STACK_SIZE,
+	// 				NULL, DATA_STORE_TASK_PRIORITY, &dataStoreTaskHandle);
+	// if (ret != pdPASS) {
+	// 	ESP_LOGE(TAG, "Failed to create Task1");
+	// 	return;
+	// }
+	// ESP_LOGI(TAG, "Task1 created successfully");
+	// ret = xTaskCreate(AppDataTEL, "DataTEL_Task", DATA_TEL_TASK_STACK_SIZE,
+	// 				  NULL, DATA_TEL_TASK_PRIORITY, &telTaskHandle);
+	// if (ret != pdPASS) {
+	// 	ESP_LOGE(TAG, "Failed to create Task1");
+	// 	return;
+	// }
+	// ESP_LOGI(TAG, "Task1 created successfully");
 }
