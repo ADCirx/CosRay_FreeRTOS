@@ -1,15 +1,4 @@
-#include "esp_log.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "host/ble_gap.h"
-#include "host/ble_hs.h"
-#include "nimble/nimble_port.h"
-#include "nimble/nimble_port_freertos.h"
-#include "nvs_flash.h"
-#include "services/gap/ble_svc_gap.h"
-#include "services/gatt/ble_svc_gatt.h"
-#include <stdio.h>
-#include <string.h>
+
 
 #include "bleprph.h"
 
@@ -17,20 +6,7 @@ static const char *TAG = "NimBLEModule";
 static uint16_t ConnHandle = BLE_HS_CONN_HANDLE_NONE;
 static bool BLEConnected = false;
 
-// 模拟谬子数据包
-#pragma pack(push, 1)
-typedef struct {
-	uint8_t header[3];		// 包头 0xAA, 0xBB, 0xCC
-	uint16_t energy;		// 谬子能量 (2字节)
-	uint64_t cpu_time;		// CPU时间 (8字节)
-	uint32_t pps;			// PPS时间 (4字节)
-	uint32_t utc_timestamp; // UTC时间戳 (4字节)
-	uint8_t gps_info[16];	// GPS信息 (16字节)
-	uint8_t reserved[470];	// 预留空间 (470字节)
-	uint8_t footer[3];		// 包尾 0xDD, 0xEE, 0xFF
-	uint16_t crc;			// CRC校验 (2字节)
-} MuonPackage_t;
-#pragma pack(pop)
+
 
 // 自定义服务UUID
 static const ble_uuid128_t MuonServiceUUID = {
