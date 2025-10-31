@@ -25,12 +25,13 @@ typedef struct{
 typedef struct {
 	uint8_t head[3];  //0xAA, 0xBB, 0xCC for MuonPackage
 	uint8_t valid_count;  //本数据包内到哪一个μ子事件是有效的
-	//（因为μ子计数率相对较低，需要周期性保存当前正在写入的数据包，保存时很可能并没有填充满有效值）
+	//（因为μ子计数率相对较低，需要周期性保存当前正在写入的数据包，保存时很可能并没有填充满有效值，但也不希望因此丢失计数）
 	//从0开始，15为本数据包已填充满有效值。如果本数据包内还没有填充有效数据值，则为0xFF。缺省的字节为0xF5
 	MuonData_t MuonData[16]; //μ子事件，每个数据包最多能填充16个有效值
-	uint8_t tail[3];   //0xDD, 0xEE, 0xFF for MuonPackage
-	uint16_t crc;
+	uint8_t tail[3];  //0xDD, 0xEE, 0xFF for MuonPackage
 	uint8_t reserved[7];
+	uint16_t crc;
+	
 }MuonPackage_t;
 #pragma pack(pop)
 

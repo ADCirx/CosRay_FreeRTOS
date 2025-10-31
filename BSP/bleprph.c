@@ -118,8 +118,8 @@ static void GenTestData(MuonPackage_t *packet) {
 	}
 
 	// 填充保留空间，之后也可以替换为13个谬子信息数据组，留出28字节
-	for (int i = 0; i < 470; i++) {
-		packet->reserved[i] = i % 256;
+	for (int i = 0; i < 7; i++) {
+		packet->reserved[i] = 0xF5;
 	}
 
 	// 设置包尾
