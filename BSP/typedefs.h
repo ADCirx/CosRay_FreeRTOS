@@ -4,13 +4,35 @@
 
 #include <stdio.h>
 
-// 模拟谬子数据包
+// 谬子数据包
 #pragma pack(push, 1)
 typedef struct{
 	uint64_t cpu_time;  //CPU时钟（8字节，lifetime counter）
 	uint16_t energy; //μ子能量，2字节（16位ADC测量值）
 	uint32_t pps; //本次上电以来的PPS脉冲计数，4字节
+} MuonData_t;  //每一个μ子事件总共14字节
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct {
+	uint8_t head[3];  //0xAA, 0xBB, 0xCC for MuonPackage
+	uint32_t PkgCnt;  //全局数据包计数，掉电不丢失
+	uint32_t utc; //当前包第一个计数写入时的utc时间
+	MuonData_t MuonData[35]; //μ子事件，每个数据包最多能填充35个有效值
+	//根据μ子计数率估算大约20s写满一个包
+	uint8_t tail[3];  //0xDD, 0xEE, 0xFF for MuonPackage
+	uint16_t crc;
+	uint8_t reserved[6];
+}MuonDataPkg_t; //平均每秒产生大约25.6B数据
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+typedef struct {
+	uint64_t cpu_time;  //写入当前数据时cpu时钟（8字节，lifetime counter）
+	uint32_t pps; //当前PPS脉冲计数，4字节
 	uint32_t utc; //最近一次收到的utc时间戳，4字节
+	uint32_t pps_utc;  //上次记录utc时间时的pps脉冲计数
+	uint64_t cputime_pps; //上次收到pps脉冲时的cpu时钟
 	uint32_t gps_long;  //1m级精度，4字节存储gps经度，无正负，从0°到360°
 	int32_t gps_lat; //1m级精度，4字节存储gps纬度，有正负，从-90°到90° 
 	//经纬度存储通过自行设计换算方法是可以优化的，基本思想是让2^32的范围尽量都有效
@@ -18,22 +40,24 @@ typedef struct{
 	int8_t  acc_x;  //加速度x值，1字节
 	int8_t  acc_y; //加速度y值，1字节
 	int8_t  acc_z; //加速度z值，1字节
-} MuonData_t;  //每一个μ子事件总共31字节
+	uint16_t  SiPMTmp; //当前tmp112记录的SiPM附近温度，2字节
+	uint8_t  MCUTmp; //ESP32内置温度传感器记录的温度值
+	uint16_t SiPMImon; //SiPM漏电流监测值
+	uint16_t SiPMVmon; //SiPM偏压监测值
+}TimeLineData_t;//总计48字节，每5秒钟生成一次
 #pragma pack(pop)
 
 #pragma pack(push, 1)
 typedef struct {
-	uint8_t head[3];  //0xAA, 0xBB, 0xCC for MuonPackage
-	uint8_t valid_count;  //本数据包内到哪一个μ子事件是有效的
-	//（因为μ子计数率相对较低，需要周期性保存当前正在写入的数据包，保存时很可能并没有填充满有效值，但也不希望因此丢失计数）
-	//从0开始，15为本数据包已填充满有效值。如果本数据包内还没有填充有效数据值，则为0xFF。缺省的字节为0xF5
-	MuonData_t MuonData[16]; //μ子事件，每个数据包最多能填充16个有效值
-	uint8_t tail[3];  //0xDD, 0xEE, 0xFF for MuonPackage
-	uint8_t reserved[7];
+	uint8_t head[3]; //0x12, 0x34, 0x56 for timeline package
+	uint32_t PkgCnt;  //该μ子探测器全局的timeline数据包计数，从0开始，掉电不丢失
+	TimeLineData_t TimeLineData[10];  //每5秒生成一次有效timeline数据，每个包最多填充10个
+	uint8_t tail[3];  //0x78 0x9A 0xBC for timeline package
 	uint16_t crc;
-	
-}MuonPackage_t;
+	uint8_t reserve[20];
+}TImeLinePkg_t; //平均每秒产生10.24B数据
 #pragma pack(pop)
+
 
 /*
 #pragma pack(push, 1)

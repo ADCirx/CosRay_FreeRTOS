@@ -11,7 +11,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 
-#include "../BSP/bsp.h"
+#include "bleprph.h"
 
 // TAG 变量指向存储在 flash 中的一个字符串字面量
 // 见esp_log使用教程：https://docs.espressif.com/projects/esp-idf/zh_CN/stable/esp32/api-reference/system/log.html
@@ -23,8 +23,14 @@ TaskHandle_t bluetoothTaskHandle;
 TaskHandle_t dataStoreTaskHandle;
 TaskHandle_t telTaskHandle;
 
+
+//********************GLOBAL VARS*************************//
 uint8_t gpsBuffer[256];
 
+
+
+//all global vars need to be declear using "extern" in bsp.h
+//********************GLOBAl VARS****************************//
 /*!
  * \brief
  *
@@ -65,7 +71,7 @@ static void AppDataStore(void *pvParameters);
  * \brief
  *
  */
-static void AppDataTEL(void *pvParameters);
+static void AppBlueTooth(void *pvParameters);
 
 /*!
  * \brief
@@ -128,7 +134,19 @@ static void AppDataStore(void *pvParameters) {}
  * \brief
  *
  */
-static void AppDataTEL(void *pvParameters) {}
+//static void AppDataTEL(void *pvParameters) {}
+// BLE 模块任务
+static void AppBlueTooth(void *pvParameters) 
+{
+	ESP_LOGI(TAG, "BLE Host Task Started");
+	nimble_port_run();
+	while (1) {
+	//ESP_LOGI(TAG, "Device is %s",
+	//			BLEConnected ? "connected" : "advertising");
+		vTaskDelay(pdMS_TO_TICKS(5000));
+	}
+	nimble_port_freertos_deinit();
+}
 
 void InterruptSetup(void) {
 	ESP_LOGI(TAG, "Setting up interrupts...");
@@ -190,3 +208,4 @@ void AppSetup(void) {
 	// }
 	// ESP_LOGI(TAG, "Task1 created successfully");
 }
+

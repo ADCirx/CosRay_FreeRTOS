@@ -4,8 +4,8 @@
 extern "C" {
 #endif
 #include "esp_log.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+//#include "freertos/FreeRTOS.h"
+//#include "freertos/task.h"
 #include "host/ble_gap.h"
 #include "host/ble_hs.h"
 #include "nimble/nimble_port.h"
@@ -23,7 +23,6 @@ extern "C" {
 // 初始化 BLE 模块
 esp_err_t InitBlueTooth(void);
 // BLE 任务函数
-void AppBlueTooth(void *pvParameters);
 
 #ifdef __cplusplus
 }

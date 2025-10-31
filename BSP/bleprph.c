@@ -1,12 +1,11 @@
 
-
+#include "bsp.h"
 #include "bleprph.h"
 #include "typedefs.h"
 
 static const char *TAG = "NimBLEModule";
 static uint16_t ConnHandle = BLE_HS_CONN_HANDLE_NONE;
 static bool BLEConnected = false;
-
 
 
 // 自定义服务UUID
@@ -117,7 +116,7 @@ static void GenTestData(MuonPackage_t *packet) {
 		MuonDataCur.acc_z = 98; //需要除10，重力加速度
 	}
 
-	// 填充保留空间，之后也可以替换为13个谬子信息数据组，留出28字节
+	// 填充保留空间
 	for (int i = 0; i < 7; i++) {
 		packet->reserved[i] = 0xF5;
 	}
@@ -191,17 +190,7 @@ static void OnSyncCallback(void) {
 	ESP_LOGI(TAG, "BLE initialized and advertising");
 }
 
-// BLE 模块任务
-void AppBlueTooth(void *pvParameters) {
-	ESP_LOGI(TAG, "BLE Host Task Started");
-	nimble_port_run();
-	while (1) {
-		ESP_LOGI(TAG, "Device is %s",
-				BLEConnected ? "connected" : "advertising");
-		vTaskDelay(pdMS_TO_TICKS(5000));
-	}
-	nimble_port_freertos_deinit();
-}
+
 
 esp_err_t InitBlueTooth(void) {
 	// 初始化 NVS Flash
