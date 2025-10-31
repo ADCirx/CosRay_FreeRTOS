@@ -11,7 +11,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 
-#include "bleprph.h"
+#include "../BSP/bsp.h"
 
 // TAG 变量指向存储在 flash 中的一个字符串字面量
 // 见esp_log使用教程：https://docs.espressif.com/projects/esp-idf/zh_CN/stable/esp32/api-reference/system/log.html
