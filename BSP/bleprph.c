@@ -1,6 +1,7 @@
 
 
 #include "bleprph.h"
+#include "typedefs.h"
 
 static const char *TAG = "NimBLEModule";
 static uint16_t ConnHandle = BLE_HS_CONN_HANDLE_NONE;
@@ -95,19 +96,25 @@ static uint16_t CalcCRC(const uint8_t *data, size_t length) {
 // 生成测试数据
 static void GenTestData(MuonPackage_t *packet) {
 	// 设置包头
-	packet->header[0] = 0xAA;
-	packet->header[1] = 0xBB;
-	packet->header[2] = 0xCC;
+	packet->head[0] = 0xAA;
+	packet->head[1] = 0xBB;
+	packet->head[2] = 0xCC;
 
 	// 固定测试数据，计划替换为实际测得的数据
-	packet->energy = 12345;				// 固定能量值
-	packet->cpu_time = 9876543210;		// 固定CPU时间
-	packet->pps = 1234567890;			// 固定PPS时间
-	packet->utc_timestamp = 1640995200; // 固定UTC时间戳 (2022-01-01 00:00:00)
-
+	MuonData_t MuonDataCur;  //提前在栈中申请空间，避免反复申请空间
 	// 固定测试的GPS信息 16字节
 	for (int i = 0; i < 16; i++) {
-		packet->gps_info[i] = 0x10 + i; // 0x10, 0x11, 0x12, ...
+		MuonDataCur = packet->MuonData[i];
+		MuonDataCur.cpu_time = 174532421;
+		MuonDataCur.pps = 104;
+		MuonDataCur.utc = 1640995200; // 固定UTC时间戳 (2022-01-01 00:00:00)
+		MuonDataCur.gps_lat = 1163268; //需要除1e4，经度取到小数点后4位
+		MuonDataCur.gps_long = 400037; 
+		//清华经纬度
+		MuonDataCur.gps_alt = 0; //海拔为0
+		MuonDataCur.acc_x = 0;
+		MuonDataCur.acc_y = 0;
+		MuonDataCur.acc_z = 98; //需要除10，重力加速度
 	}
 
 	// 填充保留空间，之后也可以替换为13个谬子信息数据组，留出28字节
@@ -116,9 +123,9 @@ static void GenTestData(MuonPackage_t *packet) {
 	}
 
 	// 设置包尾
-	packet->footer[0] = 0xDD;
-	packet->footer[1] = 0xEE;
-	packet->footer[2] = 0xFF;
+	packet->tail[0] = 0xDD;
+	packet->tail[1] = 0xEE;
+	packet->tail[2] = 0xFF;
 
 	// 计算CRC 校验
 	packet->crc = CalcCRC((uint8_t *)packet, sizeof(MuonPackage_t) - 2);
