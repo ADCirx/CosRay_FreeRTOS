@@ -1,6 +1,5 @@
-#ifndef TYPEDEFS_PRESENT
-#define TYPEDEFS_PRESENT
-
+#ifndef TYPEDEFS_H
+#define TYPEDEFS_H
 
 #include <stdio.h>
 
@@ -75,4 +74,4 @@ typedef struct {
 #pragma pack(pop)
 */
 
-#endif 
+#endif // TYPEDEFS_H
