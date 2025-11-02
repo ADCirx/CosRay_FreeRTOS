@@ -5,8 +5,7 @@
 #include "bleprph.h"
 #include "typedefs.h"
 
-static const char *TAG = "BSPModule";
-void BSPInit(void);
+esp_err_t BSPInit(void);
 
 // 缓冲区定义
 extern volatile uint8_t RxBuffer[CMD_BUFFER_SIZE];

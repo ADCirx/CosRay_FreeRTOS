@@ -1,6 +1,7 @@
 #include "bleprph.h"
 #include "bsp.h"
 
+static const char* TAG="NimBLEModule";
 static uint16_t ConnHandle = BLE_HS_CONN_HANDLE_NONE;
 static bool BLEConnected = false;
 
@@ -106,8 +107,8 @@ static int InitGATTServer(void) {
 	if (rc) {
 		return rc;
 	}
-	DataCharAttrHandle = ble_gatts_find_chr(&MuonServiceUUID, &DataCharUUID);
-	CMDCharAttrHandle = ble_gatts_find_chr(&MuonServiceUUID, &CMDCharUUID);
+	ble_gatts_find_chr(&MuonServiceUUID.u, &DataCharUUID.u, NULL, &DataCharAttrHandle);
+	ble_gatts_find_chr(&MuonServiceUUID.u, &CMDCharUUID.u, NULL, &CMDCharAttrHandle);
 	return 0;
 }
 
