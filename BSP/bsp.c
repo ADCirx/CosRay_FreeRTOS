@@ -16,5 +16,5 @@ esp_err_t BSPInit(void) {
 		ESP_LOGE(TAG, "Failed to initialize BlueTooth Peripheral");
 		return ESPRet;
 	}
-    return ESP_OK;
+	return ESP_OK;
 }

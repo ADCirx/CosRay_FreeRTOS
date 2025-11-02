@@ -1,8 +1,8 @@
 #ifndef BSP_H
 #define BSP_H
 
-#include "config.h"
 #include "bleprph.h"
+#include "config.h"
 #include "typedefs.h"
 
 esp_err_t BSPInit(void);

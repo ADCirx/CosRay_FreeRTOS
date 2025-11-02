@@ -38,28 +38,21 @@ static uint16_t CMDCharAttrHandle;
 
 // GATT服务定义
 static const struct ble_gatt_svc_def GATTServerServices[] = {
-	{
-		.type = BLE_GATT_SVC_TYPE_PRIMARY,
-		.uuid = &MuonServiceUUID.u,
-		.characteristics =
-		(struct ble_gatt_chr_def[]){
-			{
-				.uuid = &DataCharUUID.u,
-				.access_cb = DataAccessCallback,
-				.flags = BLE_GATT_CHR_F_READ,
-				.val_handle = &DataCharValHandle,
-			},
-			{
-				.uuid = &CMDCharUUID.u,
-				.access_cb = DataAccessCallback,
-				.flags = BLE_GATT_CHR_F_WRITE,
-				.val_handle = &CMDCharValHandle
-			},
-			{0}
-		}
-	},
-	{0}
-};
+	{.type = BLE_GATT_SVC_TYPE_PRIMARY,
+	 .uuid = &MuonServiceUUID.u,
+	 .characteristics =
+		 (struct ble_gatt_chr_def[]){{
+										 .uuid = &DataCharUUID.u,
+										 .access_cb = DataAccessCallback,
+										 .flags = BLE_GATT_CHR_F_READ,
+										 .val_handle = &DataCharValHandle,
+									 },
+									 {.uuid = &CMDCharUUID.u,
+									  .access_cb = DataAccessCallback,
+									  .flags = BLE_GATT_CHR_F_WRITE,
+									  .val_handle = &CMDCharValHandle},
+									 {0}}},
+	{0}};
 
 // 开始广播
 static void StartAdvertising(void) {
@@ -184,14 +177,14 @@ static int DataAccessCallback(uint16_t ConnHandle, uint16_t attr_handle,
 		// TODO DATA->TxBuffer
 		int rc = os_mbuf_append(ctxt->om, &TxBuffer, DATA_BUFFER_SIZE);
 		return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
-	}
-	else if (ctxt->op) {
+	} else if (ctxt->op) {
 		if (attr_handle != CMDCharAttrHandle) {
 			ESP_LOGE(TAG, "Write to invalid handle");
 			return BLE_ATT_ERR_WRITE_NOT_PERMITTED;
 		}
 		int len = OS_MBUF_PKTLEN(ctxt->om);
-		if (len > CMD_BUFFER_SIZE) len = CMD_BUFFER_SIZE;
+		if (len > CMD_BUFFER_SIZE)
+			len = CMD_BUFFER_SIZE;
 		int rc = os_mbuf_copydata(ctxt->om, 0, len, &RxBuffer);
 		if (rc) {
 			return BLE_ATT_ERR_UNLIKELY;

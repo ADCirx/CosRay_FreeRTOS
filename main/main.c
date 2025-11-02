@@ -23,7 +23,6 @@ TaskHandle_t bluetoothTaskHandle;
 TaskHandle_t dataStoreTaskHandle;
 TaskHandle_t telTaskHandle;
 
-
 //********************GLOBAL VARS*************************//
 volatile uint8_t RxBuffer[CMD_BUFFER_SIZE];
 volatile uint8_t TxBuffer[DATA_BUFFER_SIZE * 2];
@@ -128,16 +127,15 @@ static void AppDataStore(void *pvParameters) {}
  * \brief
  *
  */
-//static void AppDataTEL(void *pvParameters) {}
+// static void AppDataTEL(void *pvParameters) {}
 
 // BLE 模块任务
-static void AppBlueTooth(void *pvParameters) 
-{
+static void AppBlueTooth(void *pvParameters) {
 	ESP_LOGI(TAG, "BLE Host Task Started");
 	nimble_port_run();
 	while (1) {
-	//ESP_LOGI(TAG, "Device is %s",
-	//			BLEConnected ? "connected" : "advertising");
+		// ESP_LOGI(TAG, "Device is %s",
+		//			BLEConnected ? "connected" : "advertising");
 		vTaskDelay(pdMS_TO_TICKS(5000));
 	}
 	nimble_port_freertos_deinit();
@@ -180,7 +178,8 @@ void AppSetup(void) {
 
 	// 创建蓝牙任务
 	ESP_LOGI(TAG, "Creating BlueTooth Task");
-	RTOSRet = xTaskCreate(AppBlueTooth, "BlueTooth_Task", BLUETOOTH_TASK_STACK_SIZE,
+	RTOSRet =
+		xTaskCreate(AppBlueTooth, "BlueTooth_Task", BLUETOOTH_TASK_STACK_SIZE,
 					NULL, BLUETOOTH_TASK_PRIORITY, &bluetoothTaskHandle);
 	if (RTOSRet != pdPASS) {
 		ESP_LOGE(TAG, "Failed to create BlueTooth Task");
@@ -197,12 +196,11 @@ void AppSetup(void) {
 	// 	return;
 	// }
 	// ESP_LOGI(TAG, "Task1 created successfully");
-	// RTOSRet = xTaskCreate(AppDataTEL, "DataTEL_Task", DATA_TEL_TASK_STACK_SIZE,
-	// 				  NULL, DATA_TEL_TASK_PRIORITY, &telTaskHandle);
+	// RTOSRet = xTaskCreate(AppDataTEL, "DataTEL_Task",
+	// DATA_TEL_TASK_STACK_SIZE, 				  NULL, DATA_TEL_TASK_PRIORITY, &telTaskHandle);
 	// if (RTOSRet != pdPASS) {
 	// 	ESP_LOGE(TAG, "Failed to create Task1");
 	// 	return;
 	// }
 	// ESP_LOGI(TAG, "Task1 created successfully");
 }
-
