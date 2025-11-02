@@ -197,10 +197,9 @@ void AppSetup(void) {
 	// }
 	// ESP_LOGI(TAG, "Task1 created successfully");
 	// RTOSRet = xTaskCreate(AppDataTEL, "DataTEL_Task",
-	// DATA_TEL_TASK_STACK_SIZE, 				  NULL, DATA_TEL_TASK_PRIORITY, &telTaskHandle);
-	// if (RTOSRet != pdPASS) {
-	// 	ESP_LOGE(TAG, "Failed to create Task1");
-	// 	return;
+	// DATA_TEL_TASK_STACK_SIZE, 				  NULL, DATA_TEL_TASK_PRIORITY,
+	// &telTaskHandle); if (RTOSRet != pdPASS) { 	ESP_LOGE(TAG, "Failed to create
+	// Task1"); 	return;
 	// }
 	// ESP_LOGI(TAG, "Task1 created successfully");
 }
