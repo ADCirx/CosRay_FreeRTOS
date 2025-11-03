@@ -12,4 +12,4 @@ extern volatile uint8_t RxBuffer[CMD_BUFFER_SIZE];
 extern volatile uint8_t TxBuffer[DATA_BUFFER_SIZE * 2];
 extern volatile uint8_t gpsBuffer[256];
 
-#endif // BPS_H
+#endif // BSP_H
