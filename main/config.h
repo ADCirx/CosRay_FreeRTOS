@@ -31,12 +31,8 @@ extern TaskHandle_t bluetoothTaskHandle;
 extern TaskHandle_t dataStoreTaskHandle;
 extern TaskHandle_t telTaskHandle;
 
-// 缓冲区定义
-extern uint8_t gpsBuffer[256];
-
-// 数据储存结构体
-typedef struct {
-
-} data_store_t;
+// 缓冲区大小定义
+#define CMD_BUFFER_SIZE 8
+#define DATA_BUFFER_SIZE 512
 
 #endif // CONFIG_H
