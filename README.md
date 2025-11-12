@@ -2,7 +2,6 @@ Cosmic Ray detection with ESP32S3， running freertos， ver.0.1
 
 MPL2.0许可协议，修改不可闭源，但新增代码协议不必延续MPL协议
 
-
 1.1. git仓库会忽略build与Archives与Binaries目录下的所有文件，因此每次从远程仓库同步后需要重新build。
 
 1.2. 协作开发方式：每次实现新功能前，从远程仓库拉取（pull）最新版本代码到本地仓库，再新建一个分支（branch）。本地仓库多次
@@ -19,8 +18,6 @@ git使用细节参考（https://zhuanlan.zhihu.com/p/51199833 ）
 2.1. FreeRTOS直接使用ESP-IDF组件，因此没有包含在工程目录下，需要正确配置ESP-IDF。
 
 2.2. ESP-IDF自带组件的配置全部通过工程下sdkconfig完成，因此如果对sdkconfig有改动，也应当新建branch进行测试。
-
-
 
 3.1. 自定义的变量名称应当使用英文或英文缩写，尽可能简短而清晰地说明这个变量的功能。具体命名规范为大驼峰命名法，
 （参考 https://blog.csdn.net/weixin_43758823/article/details/84888470 ），每个逻辑断点的单词的首字母大写，不需要
@@ -39,25 +36,25 @@ git使用细节参考（https://zhuanlan.zhihu.com/p/51199833 ）
 
 在bsp.h内声明SCIBuf结构体
 typedef struct SCIPkg {
-    uint8_t                 Head[3];
-    SCIDataType             Event;
-    SCIDataShortType        EventShort[43];
-    uint8_t                 EffCnt[4]; 
-    uint8_t                 LostCnt[4];
-    uint8_t                 Tail[3];
-    uint8_t                 CRC[2];
+uint8_t Head[3];
+SCIDataType Event;
+SCIDataShortType EventShort[43];
+uint8_t EffCnt[4];
+uint8_t LostCnt[4];
+uint8_t Tail[3];
+uint8_t CRC[2];
 }SCIPkgType;
 
 在bsp.h内通过extern关键字声明SCIBuf全局变量
 
-extern          SCIPkgType      SCIBuf[2][8];
+extern SCIPkgType SCIBuf[2][8];
 
 在main.c内定义SCIBuf全局变量
 
-SCIPkgType      SCIBuf[2][8]     = {0};
+SCIPkgType SCIBuf[2][8] = {0};
 
 3.6. 作者信息与代码功能在代码内通过注释体现，示例：
 
-/*
-High flux mode global var   (edit by LLH 2024.11.21)
-*/
+/_
+High flux mode global var (edit by LLH 2024.11.21)
+_/
