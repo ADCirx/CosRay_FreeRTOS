@@ -20,15 +20,23 @@ static const char *TAG = "MainModule";
 // 任务句柄声明
 TaskHandle_t dataProcessTaskHandle;
 TaskHandle_t bluetoothTaskHandle;
+TaskHandle_t commandHandlerTaskHandle;
 TaskHandle_t dataStoreTaskHandle;
 TaskHandle_t telTaskHandle;
 
 //********************GLOBAL VARS*************************//
 volatile uint8_t RxBuffer[CMD_BUFFER_SIZE];
 volatile uint8_t TxBuffer[DATA_BUFFER_SIZE * 2];
-volatile uint8_t* TxBufferReadPtr = TxBuffer;
-volatile uint8_t* TxBufferWritePtr = TxBuffer + DATA_BUFFER_SIZE;
+volatile uint8_t *TxBufferReadPtr = TxBuffer;
+volatile uint8_t *TxBufferWritePtr = TxBuffer + DATA_BUFFER_SIZE;
 volatile uint8_t gpsBuffer[256];
+
+// 消息队列声明
+QueueHandle_t CommandQueue;
+QueueHandle_t DataQueue;
+
+// 信号量声明
+SemaphoreHandle_t TxBufferMutex;
 
 static void GpsRxIntTask(void);
 
@@ -67,6 +75,8 @@ static void AppDataStore(void *pvParameters);
  *
  */
 static void AppBlueTooth(void *pvParameters);
+
+static void CommandHandlerTask(void *pvParameters);
 
 /*!
  * \brief
@@ -125,10 +135,7 @@ static void AppDataProcess(void *pvParameters) {}
  */
 static void AppDataStore(void *pvParameters) {
 	ESP_LOGI(TAG, "Data Store Task Started");
-	while (1) {
-		// 数据存储逻辑
-		vTaskDelay(pdMS_TO_TICKS(1000));
-	}
+	RunDataPeripheral();
 	ESP_LOGI(TAG, "Data Store Task Ended");
 }
 
@@ -137,6 +144,11 @@ static void AppDataStore(void *pvParameters) {
  *
  */
 // static void AppDataTEL(void *pvParameters) {}
+
+static void CommandHandlerTask(void *pvParameters) {
+	ESP_LOGI(TAG, "Command Handler Task Started");
+	ESP_LOGI(TAG, "Command Handler Task Ended");
+}
 
 // BLE 模块任务
 static void AppBlueTooth(void *pvParameters) {
@@ -161,6 +173,12 @@ void InterruptSetup(void) {
 }
 
 void AppSetup(void) {
+	CommandQueue = xQueueCreate(10, sizeof(CommandMessage_t));
+	if (CommandQueue == NULL) {
+		ESP_LOGE(TAG, "Failed to create Command Queue");
+		return;
+	}
+
 	esp_err_t ESPRet;
 	BaseType_t RTOSRet;
 
@@ -190,6 +208,17 @@ void AppSetup(void) {
 		return;
 	}
 	ESP_LOGI(TAG, "BlueTooth Task created successfully");
+
+	// 创建命令处理任务
+	ESP_LOGI(TAG, "Creating Command Handler Task");
+	RTOSRet =
+		xTaskCreate(CommandHandlerTask, "CmdHandlerTask", COMMAND_HANDLER_TASK_STACK_SIZE,
+		NULL, COMMAND_HANDLER_TASK_PRIORITY, &commandHandlerTaskHandle);
+	if (RTOSRet != pdPASS) {
+		ESP_LOGE(TAG, "Failed to create Command Handler Task");
+		return;
+	}
+	ESP_LOGI(TAG, "Command Handler Task created successfully");
 
 	// 创建数据存储任务
 	RTOSRet =

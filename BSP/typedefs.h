@@ -50,28 +50,18 @@ typedef struct {
 typedef struct {
 	uint8_t head[3]; // 0x12, 0x34, 0x56 for timeline package
 	uint32_t PkgCnt; // 该μ子探测器全局的timeline数据包计数，从0开始，掉电不丢失
-	TimeLineData_t
-		TimeLineData[10]; // 每5秒生成一次有效timeline数据，每个包最多填充10个
+	TimeLineData_t TimeLineData[10]; // 每5秒生成一次有效timeline数据，每个包最多填充10个
 	uint8_t tail[3];	  // 0x78 0x9A 0xBC for timeline package
 	uint16_t crc;
 	uint8_t reserve[20];
 } TImeLinePkg_t; // 平均每秒产生10.24B数据
 #pragma pack(pop)
 
-/*
-#pragma pack(push, 1)
 typedef struct {
-	uint8_t header[3];		// 包头 0xAA, 0xBB, 0xCC
-	uint16_t energy;		// 谬子能量 (2字节)
-	uint64_t cpu_time;		// CPU时间 (8字节)
-	uint32_t pps;			// PPS时间 (4字节)
-	uint32_t utc_timestamp; // UTC时间戳 (4字节)
-	uint8_t gps_info[16];	// GPS信息 (16字节)
-	uint8_t reserved[470];	// 预留空间 (470字节)
-	uint8_t footer[3];		// 包尾 0xDD, 0xEE, 0xFF
-	uint16_t crc;			// CRC校验 (2字节)
-} MuonPackage_t;
-#pragma pack(pop)
-*/
+    uint8_t data[CMD_BUFFER_SIZE];
+    uint16_t len;
+} CommandMessage_t;
+
+typedef uint8_t DataMessage_t; // TODO 检查消息类型
 
 #endif // TYPEDEFS_H

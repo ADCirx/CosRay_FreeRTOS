@@ -12,12 +12,14 @@
 #define BLUETOOTH_TASK_PRIORITY 4
 #define DATA_STORE_TASK_PRIORITY 3
 #define DATA_TEL_TASK_PRIORITY 2
+#define COMMAND_HANDLER_TASK_PRIORITY 5 // TODO: 设置合适的优先级
 
 // 任务堆栈大小定义
 #define DATA_PROCESS_TASK_STACK_SIZE 4096
 #define BLUETOOTH_TASK_STACK_SIZE 4096
 #define DATA_STORE_TASK_STACK_SIZE 3072
 #define DATA_TEL_TASK_STACK_SIZE 3072
+#define COMMAND_HANDLER_TASK_STACK_SIZE 3072 // TODO: 设置合适的堆栈大小
 
 // 数据类型定义
 #define DATA_TYPE_GPS 1
@@ -30,6 +32,7 @@ extern TaskHandle_t dataProcessTaskHandle;
 extern TaskHandle_t bluetoothTaskHandle;
 extern TaskHandle_t dataStoreTaskHandle;
 extern TaskHandle_t telTaskHandle;
+extern TaskHandle_t commandHandlerTaskHandle;
 
 // 缓冲区大小定义
 #define CMD_BUFFER_SIZE 8

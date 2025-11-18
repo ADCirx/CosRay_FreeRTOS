@@ -11,6 +11,13 @@ extern volatile uint8_t* TxBufferReadPtr;
 extern volatile uint8_t* TxBufferWritePtr;
 extern volatile uint8_t gpsBuffer[256];
 
+// 队列定义
+extern QueueHandle_t CommandQueue;
+extern QueueHandle_t DataQueue;
+
+// 信号量定义
+extern SemaphoreHandle_t TxBufferMutex;
+
 // BSP Interface functions
 esp_err_t BSPInit(void);
 

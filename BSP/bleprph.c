@@ -192,6 +192,7 @@ static int DataAccessCallback(uint16_t ConnHandle, uint16_t attr_handle,
 			ESP_LOGE(TAG, "Read from invalid handle");
 			return BLE_ATT_ERR_READ_NOT_PERMITTED;
 		}
+		
 		int rc = os_mbuf_append(ctxt->om, TxBufferReadPtr, DATA_BUFFER_SIZE);
 		return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 	} else if (ctxt->op) {
@@ -206,7 +207,15 @@ static int DataAccessCallback(uint16_t ConnHandle, uint16_t attr_handle,
 		if (rc) {
 			return BLE_ATT_ERR_UNLIKELY;
 		}
-		// TODO command processing queue
+
+		// 将命令放入队列
+		CommandMessage_t msg;
+		msg.len = len;
+		os_mbuf_copydata(ctxt->om, 0, len, msg.data);
+		if (xQueueSend(CommandQueue, &msg, 0) != pdTRUE) {
+			ESP_LOGE(TAG, "Failed to enqueue command message");
+			return BLE_ATT_ERR_UNLIKELY;
+		}
 		return 0;
 	}
 	return 0;
