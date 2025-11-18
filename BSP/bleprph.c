@@ -89,7 +89,7 @@ static void StartAdvertising(void) {
 	AdvParams.disc_mode = BLE_GAP_DISC_MODE_GEN;
 
 	rc = ble_gap_adv_start(BLE_OWN_ADDR_PUBLIC, NULL, BLE_HS_FOREVER,
-						   &AdvParams, GAPEventCallback, NULL);
+								&AdvParams, GAPEventCallback, NULL);
 	if (rc != 0) {
 		ESP_LOGE(TAG, "Error enabling advertising: %d", rc);
 	}
@@ -106,10 +106,8 @@ static int InitGATTServer(void) {
 	if (rc) {
 		return rc;
 	}
-	ble_gatts_find_chr(&MuonServiceUUID.u, &DataCharUUID.u, NULL,
-					   &DataCharAttrHandle);
-	ble_gatts_find_chr(&MuonServiceUUID.u, &CMDCharUUID.u, NULL,
-					   &CMDCharAttrHandle);
+	ble_gatts_find_chr(&MuonServiceUUID.u, &DataCharUUID.u, NULL, &DataCharAttrHandle);
+	ble_gatts_find_chr(&MuonServiceUUID.u, &CMDCharUUID.u, NULL, &CMDCharAttrHandle);
 	return 0;
 }
 
@@ -167,6 +165,7 @@ static int GAPEventCallback(struct ble_gap_event *Event, void *Arg) {
 		ESP_LOGI(TAG, "Device disconnected");
 		ConnHandle = BLE_HS_CONN_HANDLE_NONE;
 		BLEConnected = false;
+		StartAdvertising();
 		break;
 	default:
 		break;
@@ -182,7 +181,6 @@ static int DataAccessCallback(uint16_t ConnHandle, uint16_t attr_handle,
 			ESP_LOGE(TAG, "Read from invalid handle");
 			return BLE_ATT_ERR_READ_NOT_PERMITTED;
 		}
-		// TODO DATA->TxBuffer
 		int rc = os_mbuf_append(ctxt->om, &TxBuffer, DATA_BUFFER_SIZE);
 		return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 	} else if (ctxt->op) {
@@ -197,7 +195,7 @@ static int DataAccessCallback(uint16_t ConnHandle, uint16_t attr_handle,
 		if (rc) {
 			return BLE_ATT_ERR_UNLIKELY;
 		}
-		// TODO queue pend
+		// TODO command processing queue
 		return 0;
 	}
 	return 0;

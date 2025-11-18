@@ -133,12 +133,9 @@ static void AppDataStore(void *pvParameters) {}
 static void AppBlueTooth(void *pvParameters) {
 	ESP_LOGI(TAG, "BLE Host Task Started");
 	nimble_port_run();
-	while (1) {
-		// ESP_LOGI(TAG, "Device is %s",
-		//			BLEConnected ? "connected" : "advertising");
-		vTaskDelay(pdMS_TO_TICKS(5000));
-	}
+	ESP_LOGI(TAG, "BLE Host Task Ended");
 	nimble_port_freertos_deinit();
+	ESP_LOGI(TAG, "NimBLE Port Deinitialized");
 }
 
 void InterruptSetup(void) {
