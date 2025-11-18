@@ -36,23 +36,29 @@ static uint16_t CMDCharValHandle;
 static uint16_t DataCharAttrHandle;
 static uint16_t CMDCharAttrHandle;
 
+// GATT特征定义
+static const struct ble_gatt_chr_def DataCharDef = {
+	.uuid = &DataCharUUID.u,
+	.access_cb = DataAccessCallback,
+	.flags = BLE_GATT_CHR_F_READ,
+	.val_handle = &DataCharValHandle,
+};
+static const struct ble_gatt_chr_def CMDCharDef = {
+	.uuid = &CMDCharUUID.u,
+	.access_cb = DataAccessCallback,
+	.flags = BLE_GATT_CHR_F_WRITE,
+	.val_handle = &CMDCharValHandle,
+};
+
 // GATT服务定义
 static const struct ble_gatt_svc_def GATTServerServices[] = {
-	{.type = BLE_GATT_SVC_TYPE_PRIMARY,
-	 .uuid = &MuonServiceUUID.u,
-	 .characteristics =
-		 (struct ble_gatt_chr_def[]){{
-										 .uuid = &DataCharUUID.u,
-										 .access_cb = DataAccessCallback,
-										 .flags = BLE_GATT_CHR_F_READ,
-										 .val_handle = &DataCharValHandle,
-									 },
-									 {.uuid = &CMDCharUUID.u,
-									  .access_cb = DataAccessCallback,
-									  .flags = BLE_GATT_CHR_F_WRITE,
-									  .val_handle = &CMDCharValHandle},
-									 {0}}},
-	{0}};
+	{
+		.type = BLE_GATT_SVC_TYPE_PRIMARY,
+		.uuid = &MuonServiceUUID.u,
+		.characteristics = (struct ble_gatt_chr_def[]){DataCharDef, CMDCharDef, {0}}
+	},
+	{0}
+};
 
 // 开始广播
 static void StartAdvertising(void) {
