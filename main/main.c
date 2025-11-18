@@ -211,8 +211,8 @@ void AppSetup(void) {
 
 	// 创建命令处理任务
 	ESP_LOGI(TAG, "Creating Command Handler Task");
-	RTOSRet =
-		xTaskCreate(CommandHandlerTask, "CmdHandlerTask", COMMAND_HANDLER_TASK_STACK_SIZE,
+	RTOSRet = xTaskCreate(
+		CommandHandlerTask, "CmdHandlerTask", COMMAND_HANDLER_TASK_STACK_SIZE,
 		NULL, COMMAND_HANDLER_TASK_PRIORITY, &commandHandlerTaskHandle);
 	if (RTOSRet != pdPASS) {
 		ESP_LOGE(TAG, "Failed to create Command Handler Task");

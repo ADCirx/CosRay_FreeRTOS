@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "esp_log.h"
 #include "host/ble_gap.h"
 #include "host/ble_hs.h"
 #include "nimble/nimble_port.h"
@@ -8,7 +9,6 @@
 #include "nvs_flash.h"
 #include "services/gap/ble_svc_gap.h"
 #include "services/gatt/ble_svc_gatt.h"
-#include "esp_log.h"
 
 #include "bsp.h"
 
@@ -63,13 +63,11 @@ static const struct ble_gatt_chr_def CMDCharDef = {
 
 // GATT服务定义
 static const struct ble_gatt_svc_def GATTServerServices[] = {
-	{
-		.type = BLE_GATT_SVC_TYPE_PRIMARY,
-		.uuid = &MuonServiceUUID.u,
-		.characteristics = (struct ble_gatt_chr_def[]){DataCharDef, CMDCharDef, {0}}
-	},
-	{0}
-};
+	{.type = BLE_GATT_SVC_TYPE_PRIMARY,
+	 .uuid = &MuonServiceUUID.u,
+	 .characteristics =
+		 (struct ble_gatt_chr_def[]){DataCharDef, CMDCharDef, {0}}},
+	{0}};
 
 // 开始广播
 static void StartAdvertising(void) {
@@ -100,7 +98,7 @@ static void StartAdvertising(void) {
 	AdvParams.disc_mode = BLE_GAP_DISC_MODE_GEN;
 
 	rc = ble_gap_adv_start(BLE_OWN_ADDR_PUBLIC, NULL, BLE_HS_FOREVER,
-								&AdvParams, GAPEventCallback, NULL);
+						   &AdvParams, GAPEventCallback, NULL);
 	if (rc != 0) {
 		ESP_LOGE(TAG, "Error enabling advertising: %d", rc);
 	}
@@ -117,8 +115,10 @@ static int InitGATTServer(void) {
 	if (rc) {
 		return rc;
 	}
-	ble_gatts_find_chr(&MuonServiceUUID.u, &DataCharUUID.u, NULL, &DataCharAttrHandle);
-	ble_gatts_find_chr(&MuonServiceUUID.u, &CMDCharUUID.u, NULL, &CMDCharAttrHandle);
+	ble_gatts_find_chr(&MuonServiceUUID.u, &DataCharUUID.u, NULL,
+					   &DataCharAttrHandle);
+	ble_gatts_find_chr(&MuonServiceUUID.u, &CMDCharUUID.u, NULL,
+					   &CMDCharAttrHandle);
 	return 0;
 }
 
