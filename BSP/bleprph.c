@@ -192,7 +192,7 @@ static int DataAccessCallback(uint16_t ConnHandle, uint16_t attr_handle,
 			ESP_LOGE(TAG, "Read from invalid handle");
 			return BLE_ATT_ERR_READ_NOT_PERMITTED;
 		}
-		
+		// TODO 获取信号量
 		int rc = os_mbuf_append(ctxt->om, TxBufferReadPtr, DATA_BUFFER_SIZE);
 		return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 	} else if (ctxt->op) {
