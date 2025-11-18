@@ -1,4 +1,15 @@
-#include "bleprph.h"
+#include <stdio.h>
+#include <string.h>
+
+#include "host/ble_gap.h"
+#include "host/ble_hs.h"
+#include "nimble/nimble_port.h"
+#include "nimble/nimble_port_freertos.h"
+#include "nvs_flash.h"
+#include "services/gap/ble_svc_gap.h"
+#include "services/gatt/ble_svc_gatt.h"
+#include "esp_log.h"
+
 #include "bsp.h"
 
 static const char *TAG = "NimBLEModule";
@@ -181,7 +192,7 @@ static int DataAccessCallback(uint16_t ConnHandle, uint16_t attr_handle,
 			ESP_LOGE(TAG, "Read from invalid handle");
 			return BLE_ATT_ERR_READ_NOT_PERMITTED;
 		}
-		int rc = os_mbuf_append(ctxt->om, &TxBuffer, DATA_BUFFER_SIZE);
+		int rc = os_mbuf_append(ctxt->om, TxBufferReadPtr, DATA_BUFFER_SIZE);
 		return rc == 0 ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 	} else if (ctxt->op) {
 		if (attr_handle != CMDCharAttrHandle) {
@@ -199,4 +210,12 @@ static int DataAccessCallback(uint16_t ConnHandle, uint16_t attr_handle,
 		return 0;
 	}
 	return 0;
+}
+
+void RunBlueToothHost(void) {
+	ESP_LOGI(TAG, "BLE Host Started");
+	nimble_port_run();
+	ESP_LOGI(TAG, "BLE Host Ended");
+	nimble_port_freertos_deinit();
+	ESP_LOGI(TAG, "NimBLE Port Deinitialized");
 }

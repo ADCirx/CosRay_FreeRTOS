@@ -26,6 +26,8 @@ TaskHandle_t telTaskHandle;
 //********************GLOBAL VARS*************************//
 volatile uint8_t RxBuffer[CMD_BUFFER_SIZE];
 volatile uint8_t TxBuffer[DATA_BUFFER_SIZE * 2];
+volatile uint8_t* TxBufferReadPtr = TxBuffer;
+volatile uint8_t* TxBufferWritePtr = TxBuffer + DATA_BUFFER_SIZE;
 volatile uint8_t gpsBuffer[256];
 
 static void GpsRxIntTask(void);
@@ -121,7 +123,14 @@ static void AppDataProcess(void *pvParameters) {}
  * \brief
  *
  */
-static void AppDataStore(void *pvParameters) {}
+static void AppDataStore(void *pvParameters) {
+	ESP_LOGI(TAG, "Data Store Task Started");
+	while (1) {
+		// 数据存储逻辑
+		vTaskDelay(pdMS_TO_TICKS(1000));
+	}
+	ESP_LOGI(TAG, "Data Store Task Ended");
+}
 
 /*!
  * \brief
@@ -131,11 +140,9 @@ static void AppDataStore(void *pvParameters) {}
 
 // BLE 模块任务
 static void AppBlueTooth(void *pvParameters) {
-	ESP_LOGI(TAG, "BLE Host Task Started");
-	nimble_port_run();
-	ESP_LOGI(TAG, "BLE Host Task Ended");
-	nimble_port_freertos_deinit();
-	ESP_LOGI(TAG, "NimBLE Port Deinitialized");
+	ESP_LOGI(TAG, "BLE Task Started");
+	RunBlueToothHost();
+	ESP_LOGI(TAG, "BLE Task Ended");
 }
 
 void InterruptSetup(void) {
@@ -165,7 +172,7 @@ void AppSetup(void) {
 
 	// 创建GPS接收任务
 	// RTOSRet = xTaskCreate(
-	// 	AppDataProcess, "DataProcess_Task", DATA_PROCESS_TASK_STACK_SIZE, NULL,
+	// 	AppDataProcess, "DataProcessTask", DATA_PROCESS_TASK_STACK_SIZE, NULL,
 	// 	DATA_PROCESS_TASK_PRIORITY, &dataProcessTaskHandle);
 	// if (RTOSRet != pdPASS) {
 	// 	ESP_LOGE(TAG, "Failed to create Task1");
@@ -176,7 +183,7 @@ void AppSetup(void) {
 	// 创建蓝牙任务
 	ESP_LOGI(TAG, "Creating BlueTooth Task");
 	RTOSRet =
-		xTaskCreate(AppBlueTooth, "BlueTooth_Task", BLUETOOTH_TASK_STACK_SIZE,
+		xTaskCreate(AppBlueTooth, "BlueToothTask", BLUETOOTH_TASK_STACK_SIZE,
 					NULL, BLUETOOTH_TASK_PRIORITY, &bluetoothTaskHandle);
 	if (RTOSRet != pdPASS) {
 		ESP_LOGE(TAG, "Failed to create BlueTooth Task");
@@ -185,15 +192,15 @@ void AppSetup(void) {
 	ESP_LOGI(TAG, "BlueTooth Task created successfully");
 
 	// 创建数据存储任务
-	// RTOSRet =
-	// 	xTaskCreate(AppDataStore, "DataStore_Task", DATA_STORE_TASK_STACK_SIZE,
-	// 				NULL, DATA_STORE_TASK_PRIORITY, &dataStoreTaskHandle);
-	// if (RTOSRet != pdPASS) {
-	// 	ESP_LOGE(TAG, "Failed to create Task1");
-	// 	return;
-	// }
+	RTOSRet =
+		xTaskCreate(AppDataStore, "DataStoreTask", DATA_STORE_TASK_STACK_SIZE,
+					NULL, DATA_STORE_TASK_PRIORITY, &dataStoreTaskHandle);
+	if (RTOSRet != pdPASS) {
+		ESP_LOGE(TAG, "Failed to create DataStore Task");
+		return;
+	}
 	// ESP_LOGI(TAG, "Task1 created successfully");
-	// RTOSRet = xTaskCreate(AppDataTEL, "DataTEL_Task",
+	// RTOSRet = xTaskCreate(AppDataTEL, "DataTELTask",
 	// DATA_TEL_TASK_STACK_SIZE, 				  NULL, DATA_TEL_TASK_PRIORITY,
 	// &telTaskHandle); if (RTOSRet != pdPASS) { 	ESP_LOGE(TAG, "Failed to
 	// create Task1"); 	return;
