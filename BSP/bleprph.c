@@ -110,15 +110,13 @@ static void StartAdvertising(void) {
 static int InitGATTServer(void) {
 	int rc;
 	rc = ble_gatts_count_cfg(GATTServerServices);
-	if (rc) {
-		return rc;
-	}
+	if (rc) return rc;
 	rc = ble_gatts_add_svcs(GATTServerServices);
-	if (rc) {
-		return rc;
-	}
-	ble_gatts_find_chr(&MuonServiceUUID.u, &DataCharUUID.u, NULL, &DataCharAttrHandle);
-	ble_gatts_find_chr(&MuonServiceUUID.u, &CMDCharUUID.u, NULL, &CMDCharAttrHandle);
+	if (rc) return rc;
+	rc = ble_gatts_find_chr(&MuonServiceUUID.u, &DataCharUUID.u, NULL, &DataCharAttrHandle);
+	if (rc) return rc;
+	rc = ble_gatts_find_chr(&MuonServiceUUID.u, &CMDCharUUID.u, NULL, &CMDCharAttrHandle);
+	if (rc) return rc;
 	return 0;
 }
 

@@ -27,8 +27,8 @@ TaskHandle_t telTaskHandle;
 //********************GLOBAL VARS*************************//
 volatile uint8_t RxBuffer[CMD_BUFFER_SIZE];
 volatile uint8_t TxBuffer[DATA_BUFFER_SIZE * 2];
-volatile uint8_t *TxBufferReadPtr = TxBuffer;
-volatile uint8_t *TxBufferWritePtr = TxBuffer + DATA_BUFFER_SIZE;
+volatile uint8_t *TxBufferReadPtr;
+volatile uint8_t *TxBufferWritePtr;
 volatile uint8_t gpsBuffer[256];
 
 // 消息队列声明
