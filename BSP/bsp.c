@@ -7,7 +7,6 @@
 
 #include "bsp.h"
 #include "esp_log.h"
-#include <string.h>
 
 static const char *TAG = "BSPModule";
 
