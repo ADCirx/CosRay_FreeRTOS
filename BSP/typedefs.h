@@ -50,7 +50,8 @@ typedef struct {
 typedef struct {
 	uint8_t head[3]; // 0x12, 0x34, 0x56 for timeline package
 	uint32_t PkgCnt; // 该μ子探测器全局的timeline数据包计数，从0开始，掉电不丢失
-	TimeLineData_t TimeLineData[10]; // 每5秒生成一次有效timeline数据，每个包最多填充10个
+	TimeLineData_t
+		TimeLineData[10]; // 每5秒生成一次有效timeline数据，每个包最多填充10个
 	uint8_t tail[3];	  // 0x78 0x9A 0xBC for timeline package
 	uint16_t crc;
 	uint8_t reserve[20];
@@ -58,8 +59,8 @@ typedef struct {
 #pragma pack(pop)
 
 typedef struct {
-    uint8_t data[CMD_BUFFER_SIZE];
-    uint16_t len;
+	uint8_t data[CMD_BUFFER_SIZE];
+	uint16_t len;
 } CommandMessage_t;
 
 typedef uint8_t DataMessage_t; // TODO 检查消息类型
